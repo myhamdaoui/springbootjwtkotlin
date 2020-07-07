@@ -12,7 +12,10 @@ class UserDetailsImpl(private val user: User): UserDetails {
         this.user.getPermissions().forEach { p->
             val authority = SimpleGrantedAuthority(p)
             authorities.add(authority) }
-        val authority = SimpleGrantedAuthority(user.role!!.name)
+
+        val authority = SimpleGrantedAuthority("ROLE_" + user.role!!.name)
+        authorities.add(authority)
+
         return authorities
     }
 

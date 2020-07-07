@@ -20,7 +20,7 @@ class User (
     @Column(name = "email")
     var email: String? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     var role: Role? = null,
 
