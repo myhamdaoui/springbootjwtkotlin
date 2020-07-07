@@ -27,6 +27,10 @@ class JWTAuthenticationFilter(
         private val securityProperties: SecurityProperties
 ) : UsernamePasswordAuthenticationFilter() {
 
+    init {
+        this.setFilterProcessesUrl("/api/v1/login")
+    }
+
     @Throws(AuthenticationException::class)
     override fun attemptAuthentication(
             req: HttpServletRequest,
