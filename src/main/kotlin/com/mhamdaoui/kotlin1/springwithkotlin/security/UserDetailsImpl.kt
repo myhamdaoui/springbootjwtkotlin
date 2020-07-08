@@ -24,7 +24,7 @@ class UserDetailsImpl(private val user: User): UserDetails {
     }
 
     override fun getUsername(): String {
-        return this.user.username!!
+        return this.user.email!!
     }
 
     override fun isCredentialsNonExpired(): Boolean {

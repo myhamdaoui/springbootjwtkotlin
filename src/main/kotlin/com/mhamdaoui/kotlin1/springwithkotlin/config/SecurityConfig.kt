@@ -17,9 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 import org.springframework.security.crypto.password.PasswordEncoder
 
-
-
-
 @EnableWebSecurity
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true) //  enables the @PreAuthorize annotation

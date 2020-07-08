@@ -44,7 +44,7 @@ class JWTAuthenticationFilter(
 
             authManager.authenticate(
                     UsernamePasswordAuthenticationToken(
-                            creds.username,
+                            creds.email,
                             creds.password,
                             ArrayList<GrantedAuthority>()
                     )
