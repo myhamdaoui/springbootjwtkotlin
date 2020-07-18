@@ -7,17 +7,24 @@ import com.mhamdaoui.kotlin1.springwithkotlin.dto.RegisterResponse
 import com.mhamdaoui.kotlin1.springwithkotlin.model.User
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/")
+@CrossOrigin("*")
 class AuthController (private val roleRepository: RoleRepository, private val userRepository: UserRepository, private val passwordEncoder: PasswordEncoder) {
 
     @PostMapping("/register")
     public fun register(@RequestBody registerRequest: RegisterRequest): RegisterResponse {
+        // Check if user exists
+        var emailExists = userRepository.findByEmail(registerRequest.email)
+
+        var userNameExists = userRepository.findByUsername(registerRequest.username)
+
+        if(emailExists != null) throw RuntimeException("EMAIL_TAKEN")
+
+        if(userNameExists != null) throw RuntimeException("USERNAME_TAKEN")
+
         // Create new user
         var user = User()
 

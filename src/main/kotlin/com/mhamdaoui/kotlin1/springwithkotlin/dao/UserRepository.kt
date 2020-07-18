@@ -6,6 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
 @RepositoryRestResource
 interface UserRepository: JpaRepository<User, Long>{
-    public fun findByUsername(name: String?): User
-    public fun findByEmail(name: String?): User
+    public fun findByUsername(name: String?): User?
+    public fun findByEmail(name: String?): User?
 }

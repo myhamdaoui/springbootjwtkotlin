@@ -6,15 +6,16 @@ import com.mhamdaoui.kotlin1.springwithkotlin.add
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationServiceException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import java.io.IOException
+import java.lang.RuntimeException
 import java.util.*
 import javax.servlet.FilterChain
 import javax.servlet.ServletException
@@ -36,21 +37,22 @@ class JWTAuthenticationFilter(
             req: HttpServletRequest,
             res: HttpServletResponse?
     ): Authentication {
-        return try {
+        try {
             val mapper = jacksonObjectMapper()
 
             val creds = mapper
                     .readValue<com.mhamdaoui.kotlin1.springwithkotlin.model.User>(req.inputStream)
 
-            authManager.authenticate(
+
+            return authManager.authenticate(
                     UsernamePasswordAuthenticationToken(
                             creds.email,
                             creds.password,
                             ArrayList<GrantedAuthority>()
                     )
             )
-        } catch (e: IOException) {
-            throw AuthenticationServiceException(e.message)
+        } catch (e: RuntimeException) {
+            throw RuntimeException(e.message)
         }
     }
 
@@ -71,6 +73,10 @@ class JWTAuthenticationFilter(
                 .setExpiration(Date().add(Calendar.DAY_OF_MONTH, securityProperties.expirationTime))
                 .signWith(Keys.hmacShaKeyFor(securityProperties.secret.toByteArray()), SignatureAlgorithm.HS512)
                 .compact()
+
         res.addHeader(securityProperties.headerString, securityProperties.tokenPrefix + token)
+
+        res.contentType = "application/json"
+        res.writer.write("{\"user_id\": 1, \"token\": \"$token\"}")
     }
 }
